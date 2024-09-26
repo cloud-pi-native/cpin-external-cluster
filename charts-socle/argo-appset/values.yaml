@@ -1,0 +1,8 @@
+
+components:
+  - name: "kyverno"
+    namespace: "kyverno-cpin"
+    branch: "main"
+    repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+    destination: "https://kubernetes.default.svc"
+    parameters: {}

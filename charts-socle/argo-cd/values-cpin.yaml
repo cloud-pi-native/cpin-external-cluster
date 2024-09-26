@@ -71,8 +71,8 @@ components:
     repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
     destination: "https://kubernetes.default.svc"
     parameters: {}
-  - name: "kyverno"
-    namespace: "kyverno-cpin"
+  - name: "argo-appset"
+    namespace: "argo-cpin"
     branch: "main"
     repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
     destination: "https://kubernetes.default.svc"
