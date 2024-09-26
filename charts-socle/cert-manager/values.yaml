@@ -5,7 +5,7 @@ fullnameOverride: ""
 
 clusterIssuers:
   - name: letsencrypt-staging
-    email: "your-email@example.com"
+    email: "your-email@numerique-interieur.com"
     server: "https://acme-staging-v02.api.letsencrypt.org/directory"
     privateKeySecretRef: letsencrypt-staging-key
     solvers:
@@ -14,7 +14,7 @@ clusterIssuers:
             ingressClassName: nginx
 
   - name: letsencrypt-prod
-    email: "your-email@example.com"
+    email: "your-email@numerique-interieur.com"
     server: "https://acme-v02.api.letsencrypt.org/directory"
     privateKeySecretRef: letsencrypt-prod-key
     solvers:
