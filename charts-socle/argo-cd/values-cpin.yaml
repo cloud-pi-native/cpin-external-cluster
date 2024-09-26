@@ -40,8 +40,8 @@ argo-cd:
           secretName: argocd-server-tls
       # -- Uses `server.service.servicePortHttps` instead `server.service.servicePortHttp`
       https: false      
-#    extraArgs:
-#      - --insecure # Pour accepter des connexions non sécurisées
+    extraArgs:
+      - --insecure # Pour accepter des connexions non sécurisées
 
 imagePullSecrets: []
 nameOverride: ""
