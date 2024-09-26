@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: {{ include "argocd.fullname" . }}-{{ .Values.appset.environment }}
+  name: cpin-appset
   labels:
     app: argo-appset
   annotations:
