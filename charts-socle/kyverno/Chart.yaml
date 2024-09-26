@@ -1,0 +1,12 @@
+---
+apiVersion: v2
+type: application
+name: kyverno
+version: 0.1.0
+appVersion: "0.1.1"
+description: Kubernetes Native Policy Management
+dependencies: 
+  - name: kyverno
+    alias: kyverno
+    version: 3.0.5
+    repository: https://kyverno.github.io/kyverno

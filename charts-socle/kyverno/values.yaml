@@ -1,0 +1,48 @@
+grafana_dashboard_enabled: false
+
+kyverno:
+  features:
+    policyExceptions:
+      enabled: 'true'
+
+  admissionController:
+    replicas: 3
+    container:
+      resources:
+        limits:
+          memory: 1280Mi
+    serviceMonitor:
+      enabled: true
+      metricRelabelings:
+        - sourceLabels: [kyverno_admission_review_duration_seconds_bucket]
+          action: drop
+
+  backgroundController:
+    replicas: 2
+    serviceMonitor:
+      enabled: true
+      metricRelabelings:
+        - sourceLabels: [kyverno_policy_execution_duration_seconds_bucket]
+          action: drop
+
+  cleanupController:
+    replicas: 3
+    serviceMonitor:
+      enabled: true
+
+  reportsController:
+    replicas: 2
+    resources:
+      limits:
+        memory: 512Mi
+    serviceMonitor:
+      enabled: true
+      metricRelabelings:
+        - sourceLabels: [kyverno_policy_execution_duration_seconds_bucket]
+          action: drop
+
+resourceFiltersExcludeNamespaces:
+  - openshift*
+  - infra*
+  - kube-system
+  - istio-system
