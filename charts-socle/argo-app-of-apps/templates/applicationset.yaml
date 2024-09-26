@@ -2,9 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cpin-appset
-  labels:
-    app: argo-appset
+  name: cpin-app-of-apps
   annotations:
     helm.sh/hook: post-install,post-upgrade  # Le hook pour exécuter après l'installation
 spec:
