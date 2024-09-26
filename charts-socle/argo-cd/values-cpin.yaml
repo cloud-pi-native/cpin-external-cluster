@@ -71,6 +71,12 @@ components:
     repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
     destination: "https://kubernetes.default.svc"
     parameters: {}
+  - name: "kyverno"
+    namespace: "kyverno-cpin"
+    branch: "main"
+    repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+    destination: "https://kubernetes.default.svc"
+    parameters: {}
 
 projects:
   - name: infrastructure
@@ -83,4 +89,6 @@ projects:
       - namespace: "cert-manager"
         server: "https://kubernetes.default.svc"
       - namespace: "sops-system"
+        server: "https://kubernetes.default.svc"
+      - namespace: "kyverno-cpin"
         server: "https://kubernetes.default.svc"
