@@ -1,0 +1,39 @@
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+environment: cpin
+appset:
+  environment: "cpin"
+  namespace: "argocd-cpin"
+  argoProject: "infrastructure"
+
+  # Valeurs par défaut utilisées pour les composants si elles ne sont pas spécifiées
+  default:
+    branch: "main"
+    repoUrl: "https://github.com/my-org/my-repo.git"
+    destination: "https://kubernetes.default.svc"
+    syncPolicy:
+      prune: true
+      selfHeal: true
+    ServerSideApply: true
+
+components:
+  - name: "cert-manager"
+    namespace: "cert-manager"
+    branch: "main"
+    repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+    path: "charts-socle/cert-manager"
+    destination: "https://kubernetes.default.svc"
+
+projects:
+  - name: cpin-socle
+    description: "Project contenant les outils d'administration du cluster CPiN"
+    sourceRepos:
+      - https://github.com/cloud-pi-native/cpin-external-cluster.git
+    destinations:
+      - namespace: "*"
+        server: https://kubernetes.default.svc
+    clusterResourceWhitelist:
+      - group: ""
+        kind: "Namespace"
+    namespaceResourceBlacklist: []

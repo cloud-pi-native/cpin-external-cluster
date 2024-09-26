@@ -1,0 +1,53 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: {{ include "argocd.fullname" . }}-{{ .Values.appset.environment }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade  # Le hook pour exécuter après l'installation
+spec:
+  generators:
+    - list:
+        elements:
+        {{- range .Values.components }}
+        - app: '{{ .name }}'
+          namespace: '{{ .namespace }}'
+          branch: '{{ .branch | default $.Values.appset.default.branch }}'
+          repoUrl: '{{ .repoUrl | default $.Values.appset.default.repoUrl }}'
+          destination: '{{ .destination | default $.Values.appset.default.destination }}'
+          prune: '{{ .syncPolicyPrune | default $.Values.appset.default.syncPolicy.prune }}'
+          selfHeal: '{{ .syncPolicySelfHeal | default $.Values.appset.default.syncPolicy.selfHeal }}'
+          ServerSideApply: '{{ .ServerSideApply | default $.Values.appset.default.ServerSideApply }}'
+          {{- if .parameters }}
+          parameters:
+            {{- range $key, $value := .parameters }}
+              {{ $key }}: {{ $value }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
+  template:
+    metadata:
+      name: '{{`{{`}} app {{`}}`}}'
+    spec:
+      project: '{{ .Values.appset.argoProject }}'
+      source:
+        repoURL: '{{`{{`}} repoUrl {{`}}`}}'
+        targetRevision: '{{`{{`}} branch {{`}}`}}'
+        path: 'charts-socle/{{`{{`}} app {{`}}`}}' 
+        helm:
+          valueFiles: 
+            - './values-cpin.yaml'
+          values:
+            {{- if .helmValues }}
+            {{ toYaml .helmValues | indent 12 }}  # Insertion des valeurs spécifiques ici
+            {{- end }}
+      destination:
+        server: '{{`{{`}} destination {{`}}`}}'
+        namespace: '{{`{{`}} namespace {{`}}`}}'
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+        automated:
+          prune: false
+          selfHeal: false

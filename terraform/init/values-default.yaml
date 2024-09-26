@@ -1,0 +1,10 @@
+controller:
+  name: nginx
+  kind: DaemonSet
+  ingressClass: nginx
+  allowSnippetAnnotations: false
+  ingressClassResource:
+    name: nginx
+    controllerValue: k8s.io/ingress-nginx-public
+  config:
+    log-format-escape-json: "true"

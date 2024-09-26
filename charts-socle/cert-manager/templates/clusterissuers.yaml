@@ -1,0 +1,21 @@
+{{- range .Values.clusterIssuers }}
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: {{ .name }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade  # Le hook pour exécuter après l'installation
+spec:
+  acme:
+    email: {{ .email }}
+    server: {{ .server }}
+    privateKeySecretRef:
+      name: {{ .privateKeySecretRef }}
+    solvers:
+      {{- range .solvers }}
+      - http01:
+          ingress:
+            ingressClassName: {{ .http01.ingress.ingressClassName }}
+      {{- end }}
+---
+{{- end }}

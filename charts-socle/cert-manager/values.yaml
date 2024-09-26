@@ -1,0 +1,23 @@
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+
+clusterIssuers:
+  - name: letsencrypt-staging
+    email: "your-email@example.com"
+    server: "https://acme-staging-v02.api.letsencrypt.org/directory"
+    privateKeySecretRef: letsencrypt-staging-key
+    solvers:
+      - http01:
+          ingress:
+            ingressClassName: nginx
+
+  - name: letsencrypt-prod
+    email: "your-email@example.com"
+    server: "https://acme-v02.api.letsencrypt.org/directory"
+    privateKeySecretRef: letsencrypt-prod-key
+    solvers:
+      - http01:
+          ingress:
+            ingressClassName: nginx

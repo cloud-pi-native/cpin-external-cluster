@@ -1,0 +1,86 @@
+environment: cpin
+## Globally shared configuration
+global:
+  # -- Default domain used by all components
+  ## Used for ingresses, certificates, SSO, notifications, etc.
+  domain: argocd.demo-cpin.numerique-interieur.com
+
+argo-cd:
+  server:
+    insecure: true
+    service:
+      type: ClusterIP  # Utilisation de ClusterIP pour le service ArgoCD server
+    certificate:
+      # -- Deploy a Certificate resource (requires cert-manager)
+      enabled: false
+      # -- The name of the Secret that will be automatically created and managed by this Certificate resource
+      secretName: argocd-server-tls
+      # -- Certificate primary domain (commonName)
+      domain: argocd.demo-cpin.numerique-interieur.com
+      # Certificate issuer
+      ## Ref: https://cert-manager.io/docs/concepts/issuer
+      issuer:
+        # -- Certificate issuer group. Set if using an external issuer. Eg. `cert-manager.io`
+        group: "cert-manager.io"
+        # -- Certificate issuer kind. Either `Issuer` or `ClusterIssuer`
+        kind: "ClusterIssuer"
+        # -- Certificate issuer name. Eg. `letsencrypt`
+        name: "letsencrypt-staging"
+
+    ingress:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-staging
+      ingressClassName: nginx
+      hosts:
+        - argocd.demo-cpin.numerique-interieur.com
+      tls:
+        - hosts:
+            - argocd.demo-cpin.numerique-interieur.com 
+          secretName: argocd-server-tls
+      # -- Uses `server.service.servicePortHttps` instead `server.service.servicePortHttp`
+      https: false      
+#    extraArgs:
+#      - --insecure # Pour accepter des connexions non sécurisées
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+appset:
+  environment: "cpin"
+  namespace: "argocd-system"
+  argoProject: "infrastructure"
+
+  # Valeurs par défaut utilisées pour les composants si elles ne sont pas spécifiées
+  default:
+    branch: "main"
+    repoUrl: "https://github.com/my-org/my-repo.git"
+    destination: "https://kubernetes.default.svc"
+    syncPolicy:
+      prune: false
+      selfHeal: false
+    ServerSideApply: true
+    automated:
+      prune: false
+      selfHeal: false
+
+components:
+  - name: "cert-manager"
+    namespace: "cert-manager"
+    branch: "main"
+    repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+    destination: "https://kubernetes.default.svc"
+    parameters: {}
+
+projects:
+  - name: infrastructure
+    description: "Project contenant les outils d'exploitation du cluster"
+    sourceRepos:
+      - https://github.com/cloud-pi-native/cpin-external-cluster.git
+    destinations:
+      - namespace: "kube-system"
+        server: "https://kubernetes.default.svc"
+      - namespace: "cert-manager"
+        server: "https://kubernetes.default.svc"
+      - namespace: "sops-system"
+        server: "https://kubernetes.default.svc"
