@@ -92,3 +92,5 @@ projects:
         server: "https://kubernetes.default.svc"
       - namespace: "kyverno-cpin"
         server: "https://kubernetes.default.svc"
+      - namespace: "argo-cpin"
+        server: "https://kubernetes.default.svc"        
