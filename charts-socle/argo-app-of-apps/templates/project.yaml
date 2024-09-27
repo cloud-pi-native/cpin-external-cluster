@@ -10,7 +10,7 @@ spec:
   - group: '*'
     kind: '*'
   sourceRepos:
-    {{- range Values.sourceRepos }}
+    {{- range .Values.sourceRepos }}
     - {{ . | quote }}
     {{- end }}
   destinations:
