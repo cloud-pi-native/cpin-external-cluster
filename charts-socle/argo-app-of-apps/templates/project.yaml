@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: app-of-apps-project
+  annotations:
+    helm.sh/hook: post-install,post-upgrade  # Le hook pour exécuter après l'installation
+spec:
+  description: {{ .description | quote }}
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  sourceRepos:
+    {{- range Values.sourceRepos }}
+    - {{ . | quote }}
+    {{- end }}
+  destinations:
+    {{- range $app := .Values.cpin.apps }}
+    - namespace: {{ $app.namespace }}
+      server: https://kubernetes.default.svc
+    {{- end }}
+---

@@ -76,4 +76,6 @@ projects:
       - namespace: "kyverno-cpin"
         server: "https://kubernetes.default.svc"
       - namespace: "argo-cpin"
-        server: "https://kubernetes.default.svc"        
+        server: "https://kubernetes.default.svc"
+      - namespace: "*"
+        server: "https://kubernetes.default.svc"

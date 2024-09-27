@@ -1,18 +1,8 @@
-appset:
-  environment: "cpin"
-  namespace: "argocd-cpin"
-  argoProject: "infrastructure"
 
-  # Valeurs par défaut utilisées pour les composants si elles ne sont pas spécifiées
-  default:
-    branch: "main"
-    repoUrl: "https://github.com/my-org/my-repo.git"
-    destination: "https://kubernetes.default.svc"
-    syncPolicy:
-      prune: true
-      selfHeal: true
-    ServerSideApply: true
-    
+
+sourceRepos:
+  - "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+
 cpin:
   apps:
     - name: "cert-manager"
