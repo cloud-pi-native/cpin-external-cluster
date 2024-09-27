@@ -5,7 +5,7 @@ metadata:
   annotations:
     helm.sh/hook: post-install,post-upgrade  # Le hook pour exécuter après l'installation
 spec:
-  description: {{ .description | quote }}
+  description: "Project to deploy apps"
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'
