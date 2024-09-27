@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cpin-app-of-apps
+  namespace: argo-cpin
+spec:
+  destination:
+    namespace: argo-cpin
+    server: https://kubernetes.default.svc
+  project: infrastructure
+  source:
+    helm:
+      valueFiles:
+      - ./values.yaml
+    path: charts-socle/argo-app-of-apps
+    repoURL: https://github.com/cloud-pi-native/cpin-external-cluster.git
+    targetRevision: main
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

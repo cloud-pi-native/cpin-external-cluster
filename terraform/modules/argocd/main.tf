@@ -4,6 +4,6 @@ resource "helm_release" "argocd" {
   chart = "../../charts-socle/argo-cd"
   create_namespace = true
   values = [
-    file("../../charts-socle/argo-cd/values-cpin.yaml")
+    file("../../charts-socle/argo-cd/values.yaml")
   ]
 }

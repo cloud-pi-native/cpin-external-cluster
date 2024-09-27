@@ -13,10 +13,19 @@ appset:
       selfHeal: true
     ServerSideApply: true
     
-components:
-  - name: "kyverno"
-    namespace: "kyverno-cpin"
-    branch: "main"
-    repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
-    destination: "https://kubernetes.default.svc"
-    parameters: {}
+cpin:
+  apps:
+    - name: "cert-manager"
+      namespace: "kyverno-cpin"
+      value-file: "./values-cpin.yaml"
+      branch: "main"
+      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      destination: "https://kubernetes.default.svc"
+      parameters: {}
+    - name: "kyverno"
+      namespace: "kyverno-cpin"
+      value-file: "./values-cpin.yaml"
+      branch: "main"
+      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      destination: "https://kubernetes.default.svc"
+      parameters: {}

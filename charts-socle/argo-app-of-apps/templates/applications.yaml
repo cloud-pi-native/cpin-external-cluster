@@ -1,0 +1,25 @@
+{{- range $app := .Values.cpin.apps }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ $app.name }}
+  namespace: argo-cpin
+spec:
+  destination:
+    namespace: {{ $app.namespace }}
+    server: https://kubernetes.default.svc
+  project: infrastructure
+  source:
+    helm:
+      valueFiles:
+      - {{ $app.value-file }}
+    path: charts-socle/{{ $app.name }}
+    repoURL: https://github.com/cloud-pi-native/cpin-external-cluster.git
+    targetRevision: main
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
+---
+{{- end }}
