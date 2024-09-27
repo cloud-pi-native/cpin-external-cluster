@@ -29,3 +29,10 @@ cpin:
       repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
       destination: "https://kubernetes.default.svc"
       parameters: {}
+    - name: "falco"
+      namespace: "falco-cpin"
+      valuefile: "./values.yaml"
+      branch: "main"
+      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      destination: "https://kubernetes.default.svc"
+      parameters: {}
