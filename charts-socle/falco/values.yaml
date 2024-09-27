@@ -1,0 +1,49 @@
+namespaceOverride: infra-falco
+
+falco:
+  json_output: true
+  podSecurityContext: ''
+  collectors:
+    docker:
+      enabled: false
+  driver:
+    enabled: true
+    kind: modern_ebpf
+  falcosidekick:
+    # -- Enable falcosidekick deployment.
+    enabled: true
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 750m
+      memory: 1024Mi
+
+isOpenshift: false
+
+falcosidekick:
+  enabled: true
+  podSecurityContext: ''
+  serviceMonitor:
+    enabled: true
+  ingress:
+    enabled: true
+    annotations:
+      route.openshift.io/termination: "edge"
+  webui:
+    enabled: true
+    ingress:
+      enabled: true
+      annotations:
+        route.openshift.io/termination: "edge"
+    podSecurityContext: ''
+    redis:
+      podSecurityContext: ''
+      securityContext: ''
+      storageSize: '3Gi'
+      resources:
+        limits:
+          memory: '2Gi'
+        requests:
+          memory: '1Gi'

@@ -1,0 +1,25 @@
+
+{{- if .Values.isOpenshift }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  creationTimestamp: null
+  name: falco-clusterrole
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:openshift:scc:privileged
+subjects:
+#- kind: ServiceAccount
+#  namespace: {{ include "falco.namespace" . }}
+#  name: default
+- kind: ServiceAccount
+  namespace: {{ include "falco.namespace" . }}
+  name: falco
+- kind: ServiceAccount
+  namespace: {{ include "falco.namespace" . }}
+  name: falco-falcosidekick
+- kind: ServiceAccount
+  namespace: {{ include "falco.namespace" . }}
+  name: falco-falcosidekick-ui
+  {{- end }}
