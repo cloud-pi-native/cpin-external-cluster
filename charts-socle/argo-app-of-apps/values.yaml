@@ -6,7 +6,7 @@ sourceRepos:
 cpin:
   apps:
     - name: "cert-manager"
-      namespace: "kyverno-cpin"
+      namespace: "certmanager-cpin"
       valuefile: "./values-cpin.yaml"
       branch: "main"
       repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"

@@ -46,36 +46,10 @@ argo-cd:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-appset:
-  environment: "cpin"
-  namespace: "argocd-cpin"
-  argoProject: "infrastructure"
-
-  # Valeurs par défaut utilisées pour les composants si elles ne sont pas spécifiées
-  default:
-    branch: "main"
-    repoUrl: "https://github.com/my-org/my-repo.git"
-    destination: "https://kubernetes.default.svc"
-    syncPolicy:
-      prune: true
-      selfHeal: true
-    ServerSideApply: true
 
 projects:
-  - name: infrastructure
-    description: "Project contenant les outils d'exploitation du cluster"
     sourceRepos:
       - https://github.com/cloud-pi-native/cpin-external-cluster.git
     destinations:
-      - namespace: "kube-system"
-        server: "https://kubernetes.default.svc"
-      - namespace: "cert-manager"
-        server: "https://kubernetes.default.svc"
-      - namespace: "sops-system"
-        server: "https://kubernetes.default.svc"
-      - namespace: "kyverno-cpin"
-        server: "https://kubernetes.default.svc"
       - namespace: "argo-cpin"
-        server: "https://kubernetes.default.svc"
-      - namespace: "*"
         server: "https://kubernetes.default.svc"

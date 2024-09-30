@@ -14,6 +14,8 @@ spec:
     - {{ . | quote }}
     {{- end }}
   destinations:
+    - namespace: "kube-system"
+      server: "https://kubernetes.default.svc"
     {{- range $app := .Values.cpin.apps }}
     - namespace: {{ $app.namespace }}
       server: https://kubernetes.default.svc

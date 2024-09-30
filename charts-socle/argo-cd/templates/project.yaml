@@ -1,23 +1,21 @@
-{{- range .Values.projects }}
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: {{ .name }}
+  name: infrastructure
   annotations:
     helm.sh/hook: post-install,post-upgrade  # Le hook pour exécuter après l'installation
 spec:
-  description: {{ .description | quote }}
+  description: "Project contenant les outils CPiN du cluster"
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'
   sourceRepos:
-    {{- range .sourceRepos }}
+    {{- range .Values.project.sourceRepos }}
     - {{ . | quote }}
     {{- end }}
   destinations:
-    {{- range .destinations }}
+    {{- range .Values.project.destinations }}
     - namespace: {{ .namespace | quote }}
       server: {{ .server | quote }}
     {{- end }}
 ---
-{{- end }}
