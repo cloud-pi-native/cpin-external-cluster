@@ -1,0 +1,7 @@
+apiVersion: v2
+name: kyverno-policies
+description: A Helm chart for Kubernetes to deploy  Kyverno policies
+type: application
+icon: https://kyverno.io/blog/2022/10/24/kyverno-1.8-released/kyverno.png
+version: 1.0.0
+appVersion: "1.0.0"

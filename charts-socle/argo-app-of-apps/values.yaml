@@ -17,8 +17,20 @@ cpin:
       branch: "main"
       repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
       parameters: {}
+    - name: "kyverno-rules"
+      namespace: "kyverno-cpin"
+      valuefile: "./values.yaml"
+      branch: "main"
+      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      parameters: {}
     - name: "falco"
       namespace: "falco-cpin"
+      valuefile: "./values.yaml"
+      branch: "main"
+      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      parameters: {}
+    - name: "minio-operator"
+      namespace: "minio-cpin"
       valuefile: "./values.yaml"
       branch: "main"
       repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"

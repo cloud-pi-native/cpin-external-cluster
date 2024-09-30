@@ -1,0 +1,44 @@
+{{- if .Values.check_labels.enabled }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: check-labels
+  annotations:
+    policies.kyverno.io/title: Check labels of the ressources
+    policies.kyverno.io/category: Best Practices
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/severity: low
+    policies.kyverno.io/subject: Labels
+    policies.kyverno.io/description: "Block Deployment if the labels are not set"
+spec:
+  validationFailureAction: {{ .Values.validationFailureAction }}
+  background: false
+  rules:
+  - name: check-labels
+#    skipBackgroundRequests: true
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+          - Deployment
+          - StatefulSet
+          - Job
+          - CronJob
+          - ReplicaSet
+    validate:
+      message: "Missing labels: app/env/tier"
+      pattern:
+        metadata:
+          labels:
+            app: "?*"
+            env: "?*"
+            tier: "?*"
+    exclude:
+      any:
+      - resources:
+          namespaces:
+            {{- range .Values.excludedNamespaces }}
+            - "{{ . }}"
+            {{- end }}
+{{- end }}

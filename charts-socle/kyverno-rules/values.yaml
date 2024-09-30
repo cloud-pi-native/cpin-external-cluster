@@ -1,0 +1,65 @@
+quota:
+  enabled: false
+  request:
+    cpu: 4
+    memory: 16Gi
+  limits:
+    cpu: 4
+    memory: 16Gi
+
+container_ressources: false
+check_labels:
+  enabled: false
+netpol_logging:
+  enabled: true
+netpol_cnpg:
+  enabled: true
+  namespace: infra-cnpg-system
+pvc_limit:
+  enabled: true
+  size: 1Ti
+
+require_pod_probes:
+  enabled: false
+
+registry:
+  patch: true
+  patchRegistry: "{{ regex_replace_all('^((docker\\.io\\/)(.*)|([a-zAZ\\/\\-]+:[a-zA-Z\\-]+))$', '{{ element.image }}', 'harbor.apps.dso.numerique-interieur.com/dockerhub/$3$4' ) }}"
+  replace: false
+  allowedImages: "docker.io/*|harbor.io/*|registry.redhat.io/*|quay.io/*|bitnami/*|ghcr.io/*|registry.dso.interieur.rie.gouv.fr/*|harbor.apps.dso.numerique-interieur.com/*"
+  excludedNamespaces:
+  - "openshift*"
+  - "kube*"
+  - "dso-harbor"
+  - "dso-nexus"
+
+## La valeurs peut-être egale a Enforce ou Audit
+validationFailureAction: Audit
+
+# Allowed image registry 
+#imagePolicy:
+#  allowedImages: "docker.io/*|harbor.io/*|registry.redhat.io/*|quay.io/*|bitnami/*|ghcr.io/*|registry.dso.interieur.rie.gouv.fr/*|harbor.apps.c6.numerique-interieur.com/*"
+
+
+excludedNamespaces:
+- "kube-system"
+- 
+
+# prevent customers to use following SCC
+scc:
+  enabled: true
+  list:
+    - anyuid
+    - privileged
+    - hostaccess
+    - hostmount-anyuid
+    - hostnetwork
+    - hostnetwork-v2
+    - node-exporter
+    # - machine-api-termination-handler
+    - elasticsearch-scc
+    - logging-scc
+    - trivy-operator-scc
+    - istio-scc
+    - falco-scc
+    - falco-falco-exporter

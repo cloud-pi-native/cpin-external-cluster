@@ -1,0 +1,52 @@
+{{- if .Values.container_ressources }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: all-containers-need-requests-and-limits
+  annotations:
+    policies.kyverno.io/title: Need requests and limits
+    policies.kyverno.io/category: Best Practices
+    policies.kyverno.io/severity: medium
+    kyverno.io/kyverno-version: 1.6.0
+    policies.kyverno.io/minversion: 1.6.0
+    kyverno.io/kubernetes-version: "1.20"
+    policies.kyverno.io/subject: requestAndlimits
+    policies.kyverno.io/description: >-
+      All containers must have CPU and memory resource requests and limits defined.
+spec:
+  validationFailureAction: {{ .Values.validationFailureAction }}
+  background: false
+  rules:
+  - name: check-container-resources
+#    skipBackgroundRequests: true
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+    validate:
+      message: "All containers must have CPU and memory resource requests and limits defined."
+      pattern:
+        spec:
+          containers:
+          # Select all containers in the pod. The `name` field here is not specifically required but serves
+          # as a visual aid for instructional purposes.
+          - name: "*"
+            resources:
+              limits:
+                # '?' requires 1 alphanumeric character and '*' means that
+                # there can be 0 or more characters. Using them together
+                # e.g. '?*' requires at least one character.
+                memory: "?*"
+                cpu: "?*"
+              requests:
+                memory: "?*"
+                cpu: "?*"
+    exclude:
+      any:
+      - resources:
+          namespaces:
+            {{- range .Values.excludedNamespaces }}
+            - "{{ . }}"
+            {{- end }}
+{{- end }}

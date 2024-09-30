@@ -1,0 +1,39 @@
+{{- if .Values.pvc_limit.enabled }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: limit-pvc-size
+  annotations:
+    policies.kyverno.io/title: Limit Size of Pvc
+    policies.kyverno.io/category: Best Practices
+    policies.kyverno.io/severity: high
+    kyverno.io/kyverno-version: 1.6.0
+    policies.kyverno.io/minversion: 1.6.0
+    kyverno.io/kubernetes-version: "1.20"
+    policies.kyverno.io/subject: PvcSize
+    policies.kyverno.io/description: >-
+      The Size of pvc should be less than 1Ti
+spec:
+  validationFailureAction: {{ .Values.validationFailureAction }}
+  background: false
+  rules:
+  - name: limit-pvc-size
+#    skipBackgroundRequests: true
+    match:
+      any:
+      - resources:
+          kinds:
+          - PersistentVolumeClaim
+    validate:
+      message: "PVC size should not exceed 1Ti"
+      pattern:
+        spec:
+          resources:
+            requests:
+              storage: "<={{ .Values.pvc_limit.size }}"
+    exclude:
+      any:
+      - resources:
+          namespaces:
+          - openshift-storage
+{{- end }}

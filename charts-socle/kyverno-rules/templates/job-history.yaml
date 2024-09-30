@@ -1,0 +1,49 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: check-cronjob-history-limits
+  annotations:
+    policies.kyverno.io/title: Check cronjob history limits
+    policies.kyverno.io/category: Best Practices
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/severity: low
+    policies.kyverno.io/subject: CronJob
+    policies.kyverno.io/description: " this policy ensures that every CronJob in the cluster has successfulJobsHistoryLimit and failedJobsHistoryLimit set to 5."
+spec:
+  rules:
+  - name: check-successful-jobs-history-limit
+#    skipBackgroundRequests: true
+    match:
+      any:
+      - resources:
+          kinds:
+            - CronJob
+    mutate:
+      patchStrategicMerge:
+        spec:
+          +(successfulJobsHistoryLimit): 5
+    exclude:
+      any:
+      - resources:
+          namespaces:
+            {{- range .Values.excludedNamespaces }}
+            - "{{ . }}"
+            {{- end }}
+  - name: check-failed-jobs-history-limit
+#    skipBackgroundRequests: true
+    match:
+      any:
+      - resources:
+          kinds:
+            - CronJob
+    mutate:
+      patchStrategicMerge:
+        spec:
+          +(failedJobsHistoryLimit): 5
+    exclude:
+      any:
+      - resources:
+          namespaces:
+            {{- range .Values.excludedNamespaces }}
+            - "{{ . }}"
+            {{- end }}

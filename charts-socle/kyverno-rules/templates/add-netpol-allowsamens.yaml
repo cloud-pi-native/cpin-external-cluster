@@ -1,0 +1,40 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-networkpolicy-same-ns
+  annotations:
+    policies.kyverno.io/title: Add Network Policy
+    policies.kyverno.io/category: Multi-Tenancy, NetworkPolicy
+    policies.kyverno.io/subject: NetworkPolicy
+    policies.kyverno.io/severity: low
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      By default, Kubernetes allows communications across all Pods within a cluster. allow from ingress
+spec:
+  rules:
+  - name: allow-same-ns
+#   skipBackgroundRequests: true
+    match:
+      any:
+      - resources:
+          kinds:
+          - Namespace
+    generate:
+      apiVersion: networking.k8s.io/v1
+      kind: NetworkPolicy
+      name: allow-same-namespace
+      namespace: "{{`{{ request.object.metadata.name }}`}}"
+      synchronize: false
+      data:
+        spec:
+          podSelector:
+          ingress:
+          - from:
+            - podSelector: {}
+    exclude:
+      any:
+      - resources:
+          namespaces:
+            {{- range .Values.excludedNamespaces }}
+            - "{{ . }}"
+            {{- end }}
