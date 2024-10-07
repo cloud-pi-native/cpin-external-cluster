@@ -35,3 +35,9 @@ cpin:
       branch: "main"
       repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
       parameters: {}
+    - name: "cnpg-operator"
+      namespace: "cnpg-cpin"
+      valuefile: "./values.yaml"
+      branch: "main"
+      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      parameters: {}
