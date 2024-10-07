@@ -28,10 +28,12 @@ registry:
   replace: false
   allowedImages: "docker.io/*|harbor.io/*|registry.redhat.io/*|quay.io/*|bitnami/*|ghcr.io/*|registry.dso.interieur.rie.gouv.fr/*|harbor.apps.dso.numerique-interieur.com/*"
   excludedNamespaces:
-  - "openshift*"
   - "kube*"
-  - "dso-harbor"
-  - "dso-nexus"
+  - "certmanager-cpin"
+  - "cnpg-cpin"
+  - "kyverno-cpin"
+  
+
 
 ## La valeurs peut-être egale a Enforce ou Audit
 validationFailureAction: Audit
@@ -42,24 +44,7 @@ validationFailureAction: Audit
 
 
 excludedNamespaces:
-- "kube-system"
-- 
-
-# prevent customers to use following SCC
-scc:
-  enabled: true
-  list:
-    - anyuid
-    - privileged
-    - hostaccess
-    - hostmount-anyuid
-    - hostnetwork
-    - hostnetwork-v2
-    - node-exporter
-    # - machine-api-termination-handler
-    - elasticsearch-scc
-    - logging-scc
-    - trivy-operator-scc
-    - istio-scc
-    - falco-scc
-    - falco-falco-exporter
+- "kube*"
+- "certmanager-cpin"
+- "cnpg-cpin"
+- "kyverno-cpin"
