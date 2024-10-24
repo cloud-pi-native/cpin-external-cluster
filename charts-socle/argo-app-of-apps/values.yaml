@@ -1,47 +1,46 @@
-
+cpinRepoUrl: &cpinRepoUrl "https://github.com/cloud-pi-native/cpin-external-cluster.git"
 
 sourceRepos:
-  - "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+  - *cpinRepoUrl
   - "https://github.com/cloud-pi-native/helm-charts.git"
 
 cpin:
-  
   apps:
     - name: "cert-manager"
       namespace: "certmanager-cpin"
       valuefile: "./values-cpin.yaml"
       branch: "main"
-      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      repoUrl: *cpinRepoUrl
       parameters: {}
     - name: "kyverno"
       namespace: "kyverno-cpin"
       valuefile: "./values-cpin.yaml"
       branch: "main"
-      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      repoUrl: *cpinRepoUrl
       parameters: {}
     - name: "kyverno-rules"
       namespace: "kyverno-cpin"
       valuefile: "./values.yaml"
       branch: "main"
-      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      repoUrl: *cpinRepoUrl
       parameters: {}
     - name: "falco"
       namespace: "falco-cpin"
       valuefile: "./values.yaml"
       branch: "main"
-      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      repoUrl: *cpinRepoUrl
       parameters: {}
     - name: "minio-operator"
       namespace: "minio-cpin"
       valuefile: "./values.yaml"
       branch: "main"
-      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      repoUrl: *cpinRepoUrl
       parameters: {}
     - name: "cnpg-operator"
       namespace: "cnpg-cpin"
       valuefile: "./values.yaml"
       branch: "main"
-      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      repoUrl: *cpinRepoUrl
       parameters: {}
 
 argocdDSO:
@@ -50,17 +49,17 @@ argocdDSO:
   server: https://kubernetes.default.svc
 
   gitlab:
-    token: 
-    url: 
-    zoneRepo: 
-    organization: 
+    token: glpat-54RBYkckyU248BxnFbRq
+    url: https://gitlab.apps.dso.hp.numerique-interieur.com/
+    zoneRepo: https://gitlab.apps.dso.hp.numerique-interieur.com/forge-mi/projects/infra/mi/st.git
+    organization: mi
 
   argocd:
     sso:
       name: Keycloak
-      issuer: 
-      clientId: 
-      clientSecret: 
+      issuer: https://keycloak.apps.dso.hp.numerique-interieur.com/realms/dso
+      clientId: argocd-st-zone
+      clientSecret: TAJU@Lds46B8gpak8hIqDgv5@rm-KB
     server:
       ingress:
         enabled: true

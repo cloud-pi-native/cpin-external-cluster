@@ -12,9 +12,9 @@ spec:
     helm:
       valueFiles:
       - ./values.yaml
-    path: charts-socle/argo-app-of-apps
-    repoURL: https://github.com/cloud-pi-native/cpin-external-cluster.git
-    targetRevision: main
+    path: {{ .Values.cpinAppOfApps.path }}
+    repoURL: {{ .Values.cpinRepoUrl }}
+    targetRevision: {{ .Values.cpinAppOfApps.branch }}
   syncPolicy:
     automated: {}
     syncOptions:
