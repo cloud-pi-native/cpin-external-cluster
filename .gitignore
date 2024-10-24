@@ -1,0 +1,7 @@
+terraform/init/main.auto.tfvars
+kubeconfig-empty.yaml
+kubeconfig.yaml
+terraform/cpin/.terraform.lock.hcl
+terraform/cpin/main.auto.tfvars
+terraform/cpin/terraform.tfstate
+.terraform/

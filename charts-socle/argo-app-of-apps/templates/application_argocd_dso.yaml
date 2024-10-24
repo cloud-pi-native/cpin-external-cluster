@@ -1,0 +1,54 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dso-argocd
+  namespace: argo-cpin
+spec:
+  destination:
+    namespace: {{ .Values.argocdDSO.namespace }}
+    server: {{ .Values.argocdDSO.server }}
+  project: app-of-apps-project
+  source:
+    helm:
+      values: |
+        argocdUrl: {{ .Values.argocdDSO.url }}
+        gitlab:
+          token: {{ .Values.argocdDSO.gitlab.token }}
+          url: {{ .Values.argocdDSO.gitlab.url }}
+          zoneRepo: {{ .Values.argocdDSO.gitlab.zoneRepo }}
+          namespace: {{ .Values.argocdDSO.namespace }}
+          organization: {{ .Values.argocdDSO.gitlab.organization }}
+          vso:
+            install: true
+          
+        argo-cd:
+          global:
+            domain: {{ .Values.argocdDSO.url }}
+          configs:
+            cm:
+              oidc.config: |
+                name: {{ .Values.argocdDSO.argocd.sso.name }}
+                issuer: {{ .Values.argocdDSO.argocd.sso.issuer }}
+                clientID: {{ .Values.argocdDSO.argocd.sso.clientId }}
+                clientSecret: {{ .Values.argocdDSO.argocd.sso.clientSecret }}
+                requestedScopes: ["openid", "groups"]
+          server:
+            ingress:
+              enabled: {{ .Values.argocdDSO.argocd.server.ingress.enabled }}
+              https: {{ .Values.argocdDSO.argocd.server.ingress.https }}
+              annotations:
+                nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+                nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+              hosts:
+                - {{ .Values.argocdDSO.url }}
+            configEnabled: true
+            config:
+              url: {{ .Values.argocdDSO.url }}
+    path: charts/dso-infra-argocd
+    repoURL: https://github.com/cloud-pi-native/helm-charts.git/
+    targetRevision: main
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

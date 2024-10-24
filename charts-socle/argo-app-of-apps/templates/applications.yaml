@@ -15,7 +15,7 @@ spec:
       - {{ $app.valuefile }}
     path: charts-socle/{{ $app.name }}
     repoURL: https://github.com/cloud-pi-native/cpin-external-cluster.git
-    targetRevision: main
+    targetRevision: {{ $app.branch }}
   syncPolicy:
     automated: {}
     syncOptions:

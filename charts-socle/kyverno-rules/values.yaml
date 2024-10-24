@@ -15,6 +15,9 @@ netpol_logging:
 netpol_cnpg:
   enabled: true
   namespace: infra-cnpg-system
+byoc-ns-psa:
+  enabled: true
+  mode: enforce
 pvc_limit:
   enabled: true
   size: 1Ti

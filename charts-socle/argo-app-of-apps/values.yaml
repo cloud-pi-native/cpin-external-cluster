@@ -2,8 +2,10 @@
 
 sourceRepos:
   - "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+  - "https://github.com/cloud-pi-native/helm-charts.git"
 
 cpin:
+  
   apps:
     - name: "cert-manager"
       namespace: "certmanager-cpin"
@@ -41,3 +43,26 @@ cpin:
       branch: "main"
       repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
       parameters: {}
+
+argocdDSO:
+  url: argocd-dso.demo-cpin.numerique-interieur.com
+  namespace: dso-argocd
+  server: https://kubernetes.default.svc
+
+  gitlab:
+    token: 
+    url: 
+    zoneRepo: 
+    organization: 
+
+  argocd:
+    sso:
+      name: Keycloak
+      issuer: 
+      clientId: 
+      clientSecret: 
+    server:
+      ingress:
+        enabled: true
+        https: false
+

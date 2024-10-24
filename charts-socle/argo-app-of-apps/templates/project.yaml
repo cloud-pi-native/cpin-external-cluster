@@ -20,4 +20,6 @@ spec:
     - namespace: {{ $app.namespace }}
       server: https://kubernetes.default.svc
     {{- end }}
+    - namespace: {{ .Values.argocdDSO.namespace }}
+      server: {{ .Values.argocdDSO.server }}
 ---
