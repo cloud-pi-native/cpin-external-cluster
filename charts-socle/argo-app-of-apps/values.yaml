@@ -1,7 +1,10 @@
-
+cpinRepoUrl: &cpinRepoUrl "https://github.com/cloud-pi-native/cpin-external-cluster.git"
 
 sourceRepos:
-  - "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+  - *cpinRepoUrl
+
+# -- URL du dépôt où la Console DSO spécifie les applications à déployer par ArgoCD
+dsoZoneRepo: https://gitlab.com/infra/zone.git
 
 cpin:
   apps:
@@ -9,35 +12,39 @@ cpin:
       namespace: "certmanager-cpin"
       valuefile: "./values-cpin.yaml"
       branch: "main"
-      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      repoUrl: *cpinRepoUrl
       parameters: {}
     - name: "kyverno"
       namespace: "kyverno-cpin"
       valuefile: "./values-cpin.yaml"
       branch: "main"
-      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      repoUrl: *cpinRepoUrl
       parameters: {}
     - name: "kyverno-rules"
       namespace: "kyverno-cpin"
       valuefile: "./values.yaml"
       branch: "main"
-      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      repoUrl: *cpinRepoUrl
       parameters: {}
     - name: "falco"
       namespace: "falco-cpin"
       valuefile: "./values.yaml"
       branch: "main"
-      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      repoUrl: *cpinRepoUrl
       parameters: {}
     - name: "minio-operator"
       namespace: "minio-cpin"
       valuefile: "./values.yaml"
       branch: "main"
-      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      repoUrl: *cpinRepoUrl
       parameters: {}
     - name: "cnpg-operator"
       namespace: "cnpg-cpin"
       valuefile: "./values.yaml"
       branch: "main"
-      repoUrl: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+      repoUrl: *cpinRepoUrl
       parameters: {}
+
+
+
+

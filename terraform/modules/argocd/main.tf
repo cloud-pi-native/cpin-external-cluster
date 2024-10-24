@@ -6,4 +6,5 @@ resource "helm_release" "argocd" {
   values = [
     file("../../charts-socle/argo-cd/values.yaml")
   ]
+  dependency_update = true
 }

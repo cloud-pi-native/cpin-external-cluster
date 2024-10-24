@@ -10,11 +10,11 @@ spec:
   - group: '*'
     kind: '*'
   sourceRepos:
-    {{- range .Values.project.sourceRepos }}
+    {{- range .Values.projects.sourceRepos }}
     - {{ . | quote }}
     {{- end }}
   destinations:
-    {{- range .Values.project.destinations }}
+    {{- range .Values.projects.destinations }}
     - namespace: {{ .namespace | quote }}
       server: {{ .server | quote }}
     {{- end }}
