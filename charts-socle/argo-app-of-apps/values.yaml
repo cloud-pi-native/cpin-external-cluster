@@ -49,17 +49,17 @@ argocdDSO:
   server: https://kubernetes.default.svc
 
   gitlab:
-    token: glpat-54RBYkckyU248BxnFbRq
-    url: https://gitlab.apps.dso.hp.numerique-interieur.com/
-    zoneRepo: https://gitlab.apps.dso.hp.numerique-interieur.com/forge-mi/projects/infra/mi/st.git
-    organization: mi
+    token: 
+    url: 
+    zoneRepo: 
+    organization: 
 
   argocd:
     sso:
       name: Keycloak
-      issuer: https://keycloak.apps.dso.hp.numerique-interieur.com/realms/dso
-      clientId: argocd-st-zone
-      clientSecret: TAJU@Lds46B8gpak8hIqDgv5@rm-KB
+      issuer: 
+      clientId: 
+      clientSecret: 
     server:
       ingress:
         enabled: true
