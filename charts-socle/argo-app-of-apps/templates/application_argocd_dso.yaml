@@ -44,9 +44,9 @@ spec:
             configEnabled: true
             config:
               url: {{ .Values.argocdDSO.url }}
-    path: charts/dso-infra-argocd
-    repoURL: https://github.com/cloud-pi-native/helm-charts.git/
-    targetRevision: main
+    path: {{ .Values.argocdDSO.repoPath }}
+    repoURL: {{ .Values.argocdDSO.repoUrl }}
+    targetRevision: {{ .Values.argocdDSO.repoBranch }}
   syncPolicy:
     automated: {}
     syncOptions:
