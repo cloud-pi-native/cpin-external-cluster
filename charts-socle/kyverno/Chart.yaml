@@ -5,6 +5,7 @@ name: kyverno
 version: 0.1.0
 appVersion: "0.1.1"
 description: Kubernetes Native Policy Management
+icon: https://kyverno.io/blog/2022/10/24/kyverno-1.8-released/kyverno.png
 dependencies: 
   - name: kyverno
     alias: kyverno
