@@ -2,8 +2,10 @@ apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
   name: app-of-apps-project
+  namespace: argo-cpin
   annotations:
     helm.sh/hook: post-install,post-upgrade  # Le hook pour exécuter après l'installation
+    argocd.argoproj.io/sync-wave: "1" # Evite la suppression avant les Applications
 spec:
   description: "Project to deploy apps"
   clusterResourceWhitelist:
@@ -20,4 +22,3 @@ spec:
     - namespace: {{ $app.namespace }}
       server: https://kubernetes.default.svc
     {{- end }}
----
