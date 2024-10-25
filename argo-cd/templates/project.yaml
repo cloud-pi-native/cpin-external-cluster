@@ -10,12 +10,7 @@ spec:
   - group: '*'
     kind: '*'
   sourceRepos:
-    {{- range .Values.projects.sourceRepos }}
-    - {{ . | quote }}
-    {{- end }}
+    - "https://github.com/cloud-pi-native/cpin-external-cluster.git"
   destinations:
-    {{- range .Values.projects.destinations }}
-    - namespace: {{ .namespace | quote }}
-      server: {{ .server | quote }}
-    {{- end }}
----
+    - namespace: "argo-cpin"
+      server: "https://kubernetes.default.svc"

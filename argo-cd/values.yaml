@@ -1,5 +1,8 @@
-environment: cpin
-cpinRepoUrl: &cpinRepoUrl "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+cpinRepo:
+  # -- URL du dépôt où trouver les outils à installer dans le cluster
+  url: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+  # -- Branche ou tag du dépôt à utiliser pour installer les outils
+  revision: main
 ## Globally shared configuration
 global:
   # -- Default domain used by all components
@@ -57,14 +60,3 @@ argo-cd:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
-cpinAppOfApps:
-  branch: "main"
-  path: charts-socle/argo-app-of-apps
-
-projects:
-  sourceRepos:
-    - *cpinRepoUrl
-  destinations:
-    - namespace: "argo-cpin"
-      server: "https://kubernetes.default.svc"

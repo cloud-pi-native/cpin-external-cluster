@@ -7,6 +7,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1" # Evite la suppression avant les Applications
 spec:
+  description: Project to deploy DSO Applications
   destinations:
     - name: "*"
       namespace: "*"
@@ -37,7 +38,7 @@ spec:
   template:
     metadata:
       name: {{"\"{{ index .path.segments 0 }}-{{ index .path.segments 1 }}-{{ index .path.segments 2 }}-root\"" }}
-      namespace: {{"\"{{ .argocd.namespace }}\""}}
+      namespace: {{ .Release.Namespace }}
       labels:
         app.kubernetes.io/managed-by: dso-console
         dso/projet: {{"\"{{ index .path.segments 0 }}\""}}
@@ -51,12 +52,15 @@ spec:
           helm:
             valueFiles:
               - {{"\"$values/{{ .path.path }}/{{ .path.filename }}\""}}
+            values: |
+              argocd:
+                namespace: {{ .Release.Namespace }}
         - repoURL: "{{ .Values.dsoZoneRepo }}"
           targetRevision: HEAD
           ref: values
       destination:
         name: in-cluster
-        namespace: {{"\"{{ .argocd.namespace }}\""}}
+        namespace: {{ .Release.Namespace }}
       syncPolicy:
         automated:
           prune: true
