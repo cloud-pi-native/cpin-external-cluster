@@ -7,6 +7,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1" # Evite la suppression avant les Applications
 spec:
+  description: Project to deploy DSO Applications
   destinations:
     - name: "*"
       namespace: "*"
