@@ -6,3 +6,8 @@ cpinRepo:
 
 # -- URL du dépôt où la Console DSO spécifie les applications à déployer par ArgoCD
 dsoZoneRepo: https://gitlab.com/infra/zone.git
+
+appValues:
+  sops:
+    key:
+      base64_content: RGVmYXVsdCBjcGluIHZhbHVlIHRvIGJlIGNoYW5nZWQK

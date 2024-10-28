@@ -9,6 +9,9 @@ global:
   ## Used for ingresses, certificates, SSO, notifications, etc.
   domain: argocd.demo-cpin.numerique-interieur.com
 
+# -- Values passées aux applications CPIN générées par cpin-appset
+appValues: {}
+
 argo-cd:
   crds:
     install: false
