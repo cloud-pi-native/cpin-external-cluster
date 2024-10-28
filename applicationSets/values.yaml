@@ -1,0 +1,8 @@
+cpinRepo:
+  # -- URL du dépôt où trouver les outils à installer dans le cluster
+  url: "https://github.com/cloud-pi-native/cpin-external-cluster.git"
+  # -- Branche ou tag du dépôt à utiliser pour installer les outils
+  revision: main
+
+# -- URL du dépôt où la Console DSO spécifie les applications à déployer par ArgoCD
+dsoZoneRepo: https://gitlab.com/infra/zone.git

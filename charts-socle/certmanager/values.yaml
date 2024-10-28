@@ -1,7 +1,9 @@
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
+cert-manager:
+  crds:
+    enabled: true
 
 clusterIssuers:
   - name: letsencrypt-staging

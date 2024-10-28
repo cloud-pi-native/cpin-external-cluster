@@ -1,0 +1,60 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: cpin-project
+  namespace: argo-cpin
+  annotations:
+    argocd.argoproj.io/sync-wave: "1" # Evite la suppression avant les Applications
+spec:
+  description: "Project to deploy cpin applications"
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  sourceRepos:
+    - {{ .Values.cpinRepo.url }}
+  destinations:
+    - namespace: '*'
+      server: "https://kubernetes.default.svc"
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cpin-appset
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "2" # Evite la suppression avant l'instance ArgoCD
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - git:
+      repoURL: {{ .Values.cpinRepo.url }}
+      revision: {{ .Values.cpinRepo.revision }}
+      directories:
+      - path: charts-socle/*
+  template:
+    metadata:
+      name: {{"\"{{ .path.basename }}\"" }}
+      namespace: {{ .Release.Namespace }}
+      annotations:
+        argocd.argoproj.io/sync-wave: "4" # Force la suppression avant le AppProject
+    spec:
+      project: cpin-project
+      destination:
+        namespace: {{"\"{{ .path.basename }}-cpin\"" }}
+        server: https://kubernetes.default.svc
+      source:
+        helm:
+          valueFiles:
+          - ./values.yaml
+        path: {{"\"charts-socle/{{ .path.basename }}\"" }}
+        repoURL: {{ .Values.cpinRepo.url }}
+        targetRevision: {{ .Values.cpinRepo.revision }}
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+          allowEmpty: false
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
