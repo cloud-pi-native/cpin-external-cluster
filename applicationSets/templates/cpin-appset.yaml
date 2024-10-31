@@ -47,6 +47,8 @@ spec:
         helm:
           valueFiles:
           - ./values.yaml
+          values: |
+{{ .Values.appValues | toYaml | indent 12 }}
         path: {{"\"charts-socle/{{ .path.basename }}\"" }}
         repoURL: {{ .Values.cpinRepo.url }}
         targetRevision: {{ .Values.cpinRepo.revision }}

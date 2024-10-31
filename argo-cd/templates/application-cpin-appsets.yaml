@@ -17,6 +17,8 @@ spec:
         cpinRepo:
           url: {{ .Values.cpinRepo.url }}
           revision: {{ .Values.cpinRepo.revision }}
+        appValues: 
+{{ .Values.appValues | toYaml | indent 10 }}
     path: applicationSets
     repoURL: {{ .Values.cpinRepo.url }}
     targetRevision: {{ .Values.cpinRepo.revision }}

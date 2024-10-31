@@ -1,0 +1,12 @@
+---
+apiVersion: v2
+type: application
+name: sops
+version: 0.1.0
+appVersion: "0.1.1"
+description: Kubernetes sops instalation
+dependencies: 
+  - name: sops-secrets-operator
+    alias: sops
+    version: 0.19.4
+    repository: https://isindir.github.io/sops-secrets-operator/

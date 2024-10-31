@@ -1,0 +1,10 @@
+---
+apiVersion: v2
+name: vso
+type: application
+version: 1.0.0
+appVersion: 0.8.1
+dependencies:
+  - name: vault-secrets-operator
+    repository: https://helm.releases.hashicorp.com
+    version: 0.8.1
