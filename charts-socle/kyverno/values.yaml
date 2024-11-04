@@ -68,6 +68,7 @@ byoc_ns_psa:
   enabled: true
   mode: enforce
   background: true
+  validationFailureAction: Enforce
 pvc_limit:
   enabled: true
   size: 1Ti

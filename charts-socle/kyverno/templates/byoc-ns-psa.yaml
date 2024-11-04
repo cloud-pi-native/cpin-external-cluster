@@ -11,7 +11,7 @@ metadata:
     policies.kyverno.io/subject: Labels
     policies.kyverno.io/description: "Add security label on namespace deployed by dso console"
 spec:
-  validationFailureAction: {{ .Values.validationFailureAction }}
+  validationFailureAction: {{ .Values.byoc_ns_psa.validationFailureAction | default .Values.validationFailureAction }}
   background: {{ .Values.byoc_ns_psa.background }}
   rules:
   - name: byoc-ns-psa
