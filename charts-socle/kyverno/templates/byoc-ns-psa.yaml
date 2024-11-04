@@ -27,10 +27,11 @@ spec:
     mutate:
       patchStrategicMerge:
         metadata:
-          +(pod-security.kubernetes.io/{{ .Values.byoc_ns_psa.mode }}): restricted
-          +(pod-security.kubernetes.io/{{ .Values.byoc_ns_psa.mode }}-version): latest
-          +(pod-security.kubernetes.io/warn): restricted
-          +(pod-security.kubernetes.io/warn-version): latest
+          labels:
+            +(pod-security.kubernetes.io/{{ .Values.byoc_ns_psa.mode }}): restricted
+            +(pod-security.kubernetes.io/{{ .Values.byoc_ns_psa.mode }}-version): latest
+            +(pod-security.kubernetes.io/warn): restricted
+            +(pod-security.kubernetes.io/warn-version): latest
     validate:
       message: "Missing labels from dso-console"
       pattern:
