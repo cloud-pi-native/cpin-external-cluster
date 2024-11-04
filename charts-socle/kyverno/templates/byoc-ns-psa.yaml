@@ -14,7 +14,7 @@ spec:
   validationFailureAction: {{ .Values.validationFailureAction }}
   background: false
   rules:
-  - name: check-labels-namespace
+  - name: byoc-ns-psa
 #    skipBackgroundRequests: true
     match:
       any:
@@ -32,15 +32,6 @@ spec:
             +(pod-security.kubernetes.io/{{ .Values.byoc_ns_psa.mode }}-version): latest
             +(pod-security.kubernetes.io/warn): restricted
             +(pod-security.kubernetes.io/warn-version): latest
-    validate:
-      message: "Missing labels from dso-console"
-      pattern:
-        metadata:
-          labels:
-            app.kubernetes.io/managed-by: dso-console
-            dso/environment: "?*"
-            dso/organization: "?*"
-            dso/project: "?*"
     exclude:
       any:
       - resources:
