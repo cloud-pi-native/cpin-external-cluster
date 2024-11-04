@@ -12,7 +12,7 @@ metadata:
     policies.kyverno.io/description: "Add security label on namespace deployed by dso console"
 spec:
   validationFailureAction: {{ .Values.validationFailureAction }}
-  background: true
+  background: {{ .Values.byoc_ns_psa.background }}
   rules:
   - name: byoc-ns-psa
 #    skipBackgroundRequests: true
@@ -27,10 +27,11 @@ spec:
     mutate:
       patchStrategicMerge:
         metadata:
-          +(pod-security.kubernetes.io/{{ .Values.byoc_ns_psa.mode }}): restricted
-          +(pod-security.kubernetes.io/{{ .Values.byoc_ns_psa.mode }}-version): latest
-          +(pod-security.kubernetes.io/warn): restricted
-          +(pod-security.kubernetes.io/warn-version): latest
+          labels:
+            +(pod-security.kubernetes.io/{{ .Values.byoc_ns_psa.mode }}): restricted
+            +(pod-security.kubernetes.io/{{ .Values.byoc_ns_psa.mode }}-version): latest
+            +(pod-security.kubernetes.io/warn): restricted
+            +(pod-security.kubernetes.io/warn-version): latest
     exclude:
       any:
       - resources:
