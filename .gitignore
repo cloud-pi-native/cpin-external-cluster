@@ -6,3 +6,4 @@ terraform/cpin/main.auto.tfvars
 terraform/cpin/terraform.tfstate*
 .terraform/
 /*-values.yaml
+tmp/
