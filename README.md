@@ -4,9 +4,19 @@ Ce projet a pour but de répliquer autant que possible le développement sur CPi
 
 ## Pré-requis
 
-- avoir un kubeconfig disponible
+Client:
+
+- les briques (gitlab, keycloak, vault) de la console DSO doivent être accessible (ouverture de flux, etc...): sur OVH *.apps.dso.numerique-interieur.com
+- créer un cluster kubernetes et fournir le kubeconfig
+- un ingressController sur le cluster: Openshift utilise un HAProxy repackagé.
 - générer une configuration pour sops
-- déclarer une zone dédiée dans la console DSO
+- avoir l'url du futur ArgoCD
+
+Service Team:
+
+- déclarer une zone dédiée dans la console DSO (voir [ServiceTeam.md](ServiceTeam.md))
+- fournir les informations de connexion pour Keycloak (clientID, clientSecret)
+- fournir le secret pour l'authentification d'ArgoCD à GitLab
 
 Ce chart part du principe qu'un ingress controller est installé. Si ce n'est pas le cas, un exemple pour installer un nginx est disponible dans le dossier **terraform/init**
 
@@ -20,7 +30,6 @@ L'installation se déroule en 3 étapes:
 
 ### Étape 1
 
-- Récupérer dans Keycloak le client ID et le secret pour autoriser la connexion OIDC. Ceux-ci ont été automatiquement créés à la création de la zone dans la console DSO.
 - Encoder en Base64 votre fichier SOPS. Par exemple le fichier de clé suivant :
 
   ```txt
@@ -63,7 +72,7 @@ L'installation se déroule en 3 étapes:
               - # Nom de domaine cible pour cet ArgoCD
   ```
 
-Créer le secret permettant la connexion au gitlab (à récupérer dans le namespace dso-argocd, secret gitlab) (fichier nommé gitlab-secret.yaml pour la suite):
+Demander auprès de la ServiceTeam le secret d'authentification auprès de GitLab (fichier nommé gitlab-secret.yaml pour la suite):
 
 ```yaml
 apiVersion: v1
@@ -92,8 +101,6 @@ kubectl -n argo-cpin apply -f gitlab-secret.yaml
 
 Attendre quelques minutes le temps que toutes les applications s'installent.
 
-
-
 ### Étape 3
 
 Connectez-vous à votre instance ArgoCD avec le mot de passe admin et surveillez l'installation des différents outils.
@@ -120,3 +127,27 @@ kubectl -n argo-cpin apply -f <cluster-name>-cluster-secret.yaml
 ```
 
 *Si vous modifiez le secret pour avoir comme url: `https://kubernetes.default.svc`, cela va supprimer le secret **in-cluster**. Attention aux applications qui utilisent ce nom de destination au lieu de l'url de destination.*
+
+## Différence avec l'offre Cloud Pi Native au MI
+
+### CDS
+
+#### Certificat
+
+Les certificats sont portés par la CDS, pas besoin de générer des ingress TLS
+
+### Openshift
+
+#### Réseaux
+
+L'IngressController d'Openshift est basé sur HAProxy, repackagé par RedHat. Il ne répond donc pas aux mêmes annotations que l'opérateur officiel.
+
+Voir la documentation [ici](https://docs.openshift.com/container-platform/4.15/networking/routes/route-configuration.html#nw-route-specific-annotations_route-configuration)
+
+Openshift a une notion de route en plus des ingress, pas besoin de s'en préoccuper: une route sera automatiquement créée pour chaque ingress créé.
+
+#### Sécurité
+
+Openshift est une distribution sécurisée de kubernetes qui génère automatiquement un [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) pour les pods conforme au [PSS](https://kubernetes.io/docs/concepts/security/pod-security-standards/) en mode **restricted** et avec pour la propriété **runAsUser** un nombre aléatoire.
+
+Afin de mimer au mieux les contraintes d'Openshift, ce repo active (pour les namespaces liés à un projet dans la console DSO) les [PSS](https://kubernetes.io/docs/concepts/security/pod-security-standards/) en mode **restricted**. Il faudra définir soit même le security context pour les pod, en pensant bien à mettre une valeur aléatoire pour la propriété **runAsUser**.
