@@ -11,10 +11,10 @@ metadata:
     policies.kyverno.io/subject: Labels
     policies.kyverno.io/description: "Add security label on namespace deployed by dso console"
 spec:
-  validationFailureAction: {{ .Values.validationFailureAction }}
-  background: false
+  validationFailureAction: {{ .Values.byoc_ns_psa.validationFailureAction | default .Values.validationFailureAction }}
+  background: {{ .Values.byoc_ns_psa.background }}
   rules:
-  - name: check-labels-namespace
+  - name: byoc-ns-psa
 #    skipBackgroundRequests: true
     match:
       any:
@@ -27,19 +27,11 @@ spec:
     mutate:
       patchStrategicMerge:
         metadata:
-          +(pod-security.kubernetes.io/{{ .Values.byoc_ns_psa.mode }}): restricted
-          +(pod-security.kubernetes.io/{{ .Values.byoc_ns_psa.mode }}-version): latest
-          +(pod-security.kubernetes.io/warn): restricted
-          +(pod-security.kubernetes.io/warn-version): latest
-    validate:
-      message: "Missing labels from dso-console"
-      pattern:
-        metadata:
           labels:
-            app.kubernetes.io/managed-by: dso-console
-            dso/environment: "?*"
-            dso/organization: "?*"
-            dso/project: "?*"
+            +(pod-security.kubernetes.io/{{ .Values.byoc_ns_psa.mode }}): restricted
+            +(pod-security.kubernetes.io/{{ .Values.byoc_ns_psa.mode }}-version): latest
+            +(pod-security.kubernetes.io/warn): restricted
+            +(pod-security.kubernetes.io/warn-version): latest
     exclude:
       any:
       - resources:

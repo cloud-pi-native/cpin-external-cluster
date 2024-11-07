@@ -67,6 +67,8 @@ netpol_cnpg:
 byoc_ns_psa:
   enabled: true
   mode: enforce
+  background: false
+  validationFailureAction: Enforce
 pvc_limit:
   enabled: true
   size: 1Ti

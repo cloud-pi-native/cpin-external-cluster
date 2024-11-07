@@ -7,3 +7,5 @@ terraform/cpin/terraform.tfstate*
 .terraform/
 /*-values.yaml
 tmp/
+**/Chart.lock
+**/charts/
