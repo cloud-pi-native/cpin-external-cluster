@@ -113,11 +113,9 @@ helm upgrade --install --create-namespace -n argo-cpin -f custom-values.yaml arg
 kubectl -n argo-cpin apply -f gitlab-secret.yaml
 ```
 
-Attendre quelques minutes le temps que toutes les applications s'installent.
-
 ### Étape 3
 
-Connectez-vous à votre instance ArgoCD avec le mot de passe admin et surveillez l'installation des différents outils.
+Connectez-vous à votre instance ArgoCD avec le mot de passe admin pour refresh les applications et surveillez l'installation des différents outils.
 
 Pour récupérer le mot de passe admin :
 
