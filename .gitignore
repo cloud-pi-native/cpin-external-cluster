@@ -9,3 +9,4 @@ terraform/cpin/terraform.tfstate*
 tmp/
 **/Chart.lock
 **/charts/
+gitlab-secret.yaml

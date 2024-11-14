@@ -2,6 +2,20 @@
 
 Ce projet a pour but de répliquer autant que possible le développement sur CPiN depuis un cluster personnel afin de faciliter la transition vers un cluster de production géré par CPiN.
 
+## Architecture
+
+Le projet va déployé un ArgoCD qui va piloter les déploiements de la zone associée au cluster.
+
+Deux appset seront créés:
+
+- cpin-appset: appset qui sera en charge d'installer les outils de sécurité pour mimer au mieux un cluster CPiN
+- dso-appset: appset qui est chargé de déployer les applications créées dans la console hexaforge
+
+Pour récupérer les sources, les secrets, l'authentification, un flux devra être ouvert vers le cluster DSO opéré par les équipes de Cloud Pi Native
+
+![architecture](docs/img/architecture.png)
+
+
 ## Pré-requis
 
 Client:
@@ -108,7 +122,7 @@ Connectez-vous à votre instance ArgoCD avec le mot de passe admin et surveillez
 Pour récupérer le mot de passe admin :
 
 ```shell
-kubectl -n argo-cpin get secret argocd-initial-admin-secret --template="{{ .data.password | base64decode}}"
+kubectl -n argo-cpin get secret argocd-initial-admin-secret --template="{{ .data.password | base64decode}}"; echo ""
 ```
 
 ## Post-Config
