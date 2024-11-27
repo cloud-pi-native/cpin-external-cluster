@@ -18,21 +18,21 @@ Pour récupérer les sources, les secrets, l'authentification, un flux devra êt
 
 ## Pré-requis
 
-Client:
+**Client:**
 
 - les briques (gitlab, keycloak, vault) de la console DSO doivent être accessible (ouverture de flux, etc...): sur OVH *.apps.dso.numerique-interieur.com
 - créer un cluster kubernetes et fournir le kubeconfig
-- un ingressController sur le cluster: Openshift utilise un HAProxy repackagé.
+- un IngressController sur le cluster (Openshift utilise un HAProxy repackagé).
 - générer une configuration pour sops
 - avoir l'url du futur ArgoCD
 
-Service Team:
+**Service Team:**
 
 - déclarer une zone dédiée dans la console DSO (voir [ServiceTeam.md](ServiceTeam.md))
 - fournir les informations de connexion pour Keycloak (clientID, clientSecret)
 - fournir le secret pour l'authentification d'ArgoCD à GitLab
 
-Ce chart part du principe qu'un ingress controller est installé. Si ce n'est pas le cas, un exemple pour installer un nginx est disponible dans le dossier **terraform/init**
+> Ce chart part du principe qu'un ingress controller est installé. Si ce n'est pas le cas, un exemple pour installer un nginx est disponible dans le dossier **terraform/init**
 
 ## Installation
 
@@ -42,23 +42,31 @@ L'installation se déroule en 3 étapes:
 2. Installation ArgoCD + des applications sets
 3. (Automatique) Installation des autres briques via argocd
 
-### Étape 1
+### Étape 1: Configuration
 
-- Encoder en Base64 votre fichier SOPS. Par exemple le fichier de clé suivant :
+#### SOPS
 
-  ```txt
-  # created: 2024-09-26T09:58:11+02:00
-  # public key: age13pzeffy3d4mrfzy3n6mc03v5secs57n0jju5vndhynmzasxx63lq33y3gm
-  AGE-SECRET-KEY-1UTLA4FQQD3MJMUEGNEXF94K9MS4YFPF2MAHQR6YMDRCLE0PEK9XSQKQE4T
-  ```
+Les clusters SOPS ont accès à l'[opérateur SOPS](https://github.com/isindir/sops-secrets-operator) qui permet de chiffrer un fichier de secret et pouvoir le commiter dans git.
 
-  devient en base 64 :
+SOPS accepte plusieurs méthodes de chiffrement, l'équipe CPiN a choisi l'algorithme [AGE](https://github.com/FiloSottile/age) pour ses clusters:
 
-  ```txt
-  IyBjcmVhdGVkOiAyMDI0LTA5LTI2VDA5OjU4OjExKzAyOjAwDQojIHB1YmxpYyBrZXk6IGFnZTEzcHplZmZ5M2Q0bXJmenkzbjZtYzAzdjVzZWNzNTduMGpqdTV2bmRoeW5temFzeHg2M2xxMzN5M2dtDQpBR0UtU0VDUkVULUtFWS0xVVRMQTRGUVFEM01KTVVFR05FWEY5NEs5TVM0WUZQRjJNQUhRUjZZTURSQ0xFMFBFSzlYU1FLUUU0VA==
-  ```
+- Générer le fichier de configuration AGE:
+```shell
+age-keygen -o key.txt
+```
+
+- Encoder le contenu en base64:
+```shell
+cat key.txt | base64 -w 0
+```
+
+### Configuration des briques CPiN du nouveau cluster
 
 - Préparer en local le fichier `custom-values.yaml` à la racine du présent dépôt et remplacer les `# valeurs spécifiques` :
+    - **dsoZoneRepo**: Url du dépôt Gitlab pour la zone DSO avec un .git - fourni par la ServiceTeam
+    - **appValues.sops.key.base64_content**: Base64 de votre fichier SOPS - voir étape précédente
+    - **global.domain / etc**: Nom de domaine cible pour cet ArgoCD - votre choix
+    - **argo-cd.configs.cm.oidc.config**: Configuration pour se connecter à ArgoCD via keycloak - informations fournies par la ServiceTeam
 
   ```yaml
   dsoZoneRepo: # Url du dépôt Gitlab pour la zone DSO avec un .git
@@ -86,24 +94,27 @@ L'installation se déroule en 3 étapes:
               - # Nom de domaine cible pour cet ArgoCD
   ```
 
-Demander auprès de la ServiceTeam le secret d'authentification auprès de GitLab (fichier nommé gitlab-secret.yaml pour la suite):
+ArgoCD a besoin de s'authentifier auprès du GitLab de DSO pour récupérer des informations, pour cela ArgoCD va scruter son namespace à la recherche de secret avec le label `argocd.argoproj.io/secret-type: repo-creds`.
+
+Créer le manifest suivant (nommé gitlab-secret.yaml dans la suite du README), la ServiceTeam fournira les informations de connexion nécessaire:
 
 ```yaml
 apiVersion: v1
-data:
-  password: 
-  url: 
-  username: 
 kind: Secret
 metadata:
   labels:
     argocd.argoproj.io/secret-type: repo-creds
   name: gitlab
 type: Opaque
+data:
+  url:
+  username:
+  password:
+```
 
-### Étape 2
+### Étape 2: Installation
 
-Assurez-vous d'avoir le bon contexte Kubernetes (fichier .kube/config ou variable d'environnement KUBECONFIG) et lancez les commandes suivantes :
+Assurez-vous d'avoir le bon contexte Kubernetes (fichier .kube/config ou variable d'environnement KUBECONFIG) et lancez les commandes suivantes depuis la racine du dossier:
 
 ```sh
 kubectl apply -k https://github.com/argoproj/argo-cd/manifests/crds\?ref\=stable
@@ -113,7 +124,7 @@ helm upgrade --install --create-namespace -n argo-cpin -f custom-values.yaml arg
 kubectl -n argo-cpin apply -f gitlab-secret.yaml
 ```
 
-### Étape 3
+### Étape 3: Administration
 
 Connectez-vous à votre instance ArgoCD avec le mot de passe admin pour refresh les applications et surveillez l'installation des différents outils.
 
