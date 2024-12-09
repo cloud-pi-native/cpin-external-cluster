@@ -21,7 +21,7 @@ Pour récupérer les sources, les secrets, l'authentification, un flux devra êt
 **Client:**
 
 - les briques (gitlab, keycloak, vault) de la console DSO doivent être accessible (ouverture de flux, etc...): sur OVH *.apps.dso.numerique-interieur.com
-- créer un cluster kubernetes et fournir le kubeconfig
+- créer un cluster kubernetes et avoir le kubeconfig (configuration pour ArgoCD)
 - un IngressController sur le cluster (Openshift utilise un HAProxy repackagé).
 - générer une configuration pour sops
 - avoir l'url du futur ArgoCD
