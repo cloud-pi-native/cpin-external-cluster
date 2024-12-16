@@ -8,10 +8,11 @@ spec:
     namespace: argo-cpin
     server: https://kubernetes.default.svc
   project: infrastructure
-  source:
-    helm:
+  sources:
+  - helm:
       valueFiles:
       - ./values.yaml
+      - $argocdValues/argocd-values.yaml
       values: |
         dsoZoneRepo: {{ .Values.dsoZoneRepo }}
         cpinRepo:
@@ -22,6 +23,9 @@ spec:
     path: applicationSets
     repoURL: {{ .Values.cpinRepo.url }}
     targetRevision: {{ .Values.cpinRepo.revision }}
+  - repoURL: {{ .Values.dsoZoneRepo }}
+    targetRevision: HEAD
+    ref: argocdValues
   syncPolicy:
     automated:
       prune: true
