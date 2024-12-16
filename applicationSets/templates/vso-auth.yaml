@@ -1,0 +1,32 @@
+{{ if .Capabilities.APIVersions.Has "secrets.hashicorp.com/v1beta1" -}}
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultConnection
+metadata:
+  name: default
+  namespace: argo-cpin
+spec:
+  address: {{ .Values.vault.url }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vso-approle
+  namespace: argo-cpin
+stringData:
+  id: {{ .Values.vault.secretId }}
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultAuth
+metadata:
+  name: vault-auth
+  namespace: argo-cpin
+spec:
+  vaultConnectionRef: default
+  method: appRole
+  mount: approle
+  appRole:
+    roleId: {{ .Values.vault.roleId }}
+    secretRef: vso-approle
+  allowedNamespaces: 
+    - argo-cpin
+{{ end -}}
