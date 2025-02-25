@@ -1,0 +1,18 @@
+{{ if .Values.openshift.enabled -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: argo-route
+  namespace: argo-cpin
+spec:
+  host: {{ .Values.global.domain }}
+  port:
+    targetPort: http
+  tls:
+    termination: passthrough
+  to:
+    kind: Service
+    name: {{ .Release.Name }}-argocd-server
+    weight: 100
+  wildcardPolicy: None
+{{ end -}}
