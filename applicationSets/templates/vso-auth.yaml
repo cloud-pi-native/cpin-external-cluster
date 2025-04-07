@@ -1,4 +1,4 @@
-{{ if .Capabilities.APIVersions.Has "secrets.hashicorp.com/v1beta1" -}}
+{{ if not .Values.openshift.enabled -}}
 apiVersion: secrets.hashicorp.com/v1beta1
 kind: VaultConnection
 metadata:
@@ -6,6 +6,7 @@ metadata:
   namespace: argo-cpin
 spec:
   address: {{ .Values.vault.url }}
+{{- end }}
 ---
 apiVersion: v1
 kind: Secret
@@ -21,7 +22,6 @@ metadata:
   name: vault-auth
   namespace: argo-cpin
 spec:
-  vaultConnectionRef: default
   method: appRole
   mount: approle
   appRole:
@@ -29,4 +29,3 @@ spec:
     secretRef: vso-approle
   allowedNamespaces: 
     - argo-cpin
-{{ end -}}

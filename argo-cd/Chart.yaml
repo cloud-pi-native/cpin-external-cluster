@@ -25,5 +25,5 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: argo-cd
-    version: 7.5.2  # La version du chart ArgoCD
+    version: 7.7.16  # La version du chart ArgoCD
     repository: "https://argoproj.github.io/argo-helm"  # Le dépôt où se trouve le chart
