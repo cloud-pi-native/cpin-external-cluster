@@ -22,7 +22,7 @@ metadata:
   name: dso-appset
   namespace: {{ .Release.Namespace }}
   annotations:
-    argocd.argoproj.io/sync-wave: "2" # Evite la suppression avant l'instance ArgoCD
+    argocd.argoproj.io/sync-wave: "20" # Evite la suppression avant l'instance ArgoCD
 spec:
   goTemplate: true
   generators:
@@ -39,6 +39,8 @@ spec:
     metadata:
       name: {{"\"{{ index .path.segments 0 }}-{{ index .path.segments 1 }}-{{ index .path.segments 2 }}-root\"" }}
       namespace: {{ .Release.Namespace }}
+      annotations:
+        argocd.argoproj.io/sync-wave: "21"
       labels:
         app.kubernetes.io/managed-by: dso-console
         dso/projet: {{"\"{{ index .path.segments 0 }}\""}}

@@ -12,6 +12,9 @@ global:
 # -- Values passées aux applications CPIN générées par cpin-appset
 appValues: {}
 
+openshift:
+  enabled: false
+
 argo-cd:
   crds:
     install: false

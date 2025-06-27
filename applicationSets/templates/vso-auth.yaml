@@ -4,6 +4,8 @@ kind: VaultConnection
 metadata:
   name: default
   namespace: argo-cpin
+  annotations:
+    argocd.argoproj.io/sync-wave: "10" # Après l'installation des CRDs VSO (via cpin-appsets)
 spec:
   address: {{ .Values.vault.url }}
 {{- end }}
@@ -13,6 +15,8 @@ kind: Secret
 metadata:
   name: vso-approle
   namespace: argo-cpin
+  annotations:
+    argocd.argoproj.io/sync-wave: "10" # Après l'installation des CRDs VSO (via cpin-appsets)
 stringData:
   id: {{ .Values.vault.secretId }}
 ---
@@ -21,7 +25,12 @@ kind: VaultAuth
 metadata:
   name: vault-auth
   namespace: argo-cpin
+  annotations:
+    argocd.argoproj.io/sync-wave: "10" # Après l'installation des CRDs VSO (via cpin-appsets)
 spec:
+{{- if not .Values.openshift.enabled }}
+  vaultConnectionRef: default
+{{- end }}
   method: appRole
   mount: approle
   appRole:
