@@ -34,7 +34,8 @@ spec:
   ignoreApplicationDifferences:
     - jsonPointers:
         - /spec/syncPolicy
-        - /spec/sources/0/targetRevision
+      jqPathExpressions:
+        - .spec.sources[] | select(.repoURL == "{{ .Values.dsoZoneRepo }}") | .targetRevision
   template:
     metadata:
       name: {{"\"{{ index .path.segments 0 }}-{{ index .path.segments 1 }}-{{ index .path.segments 2 }}-root\"" }}
