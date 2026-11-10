@@ -8,6 +8,8 @@ global:
   # -- Default domain used by all components
   ## Used for ingresses, certificates, SSO, notifications, etc.
   domain: argocd.demo-cpin.numerique-interieur.com
+  networkPolicy:
+    create: false  
 
 # -- Values passées aux applications CPIN générées par cpin-appset
 appValues: {}
