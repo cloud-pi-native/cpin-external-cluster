@@ -62,6 +62,15 @@ argo-cd:
         clientSecret: tobedefined
         requestedScopes: ["openid", "groups"]
 
+redis-ha:
+    enabled: true
+    haproxy:
+      image:
+        repository: docker.io/haproxy
+        tag: alpine3.22
+    image:
+      repository: docker.io/redis
+      tag: 7.4.1-alpine
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
